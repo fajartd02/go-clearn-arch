@@ -1,0 +1,24 @@
+version: "1"
+services:
+  database:
+    image: postgres:13-alpine
+    restart: always
+    ports:
+      - "1200:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=products
+      - POSTGRES_PASSWORD=docker
+    volumes:
+      - data:/var/lib/postgresql/data
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    depends_on:
+      - database
+    ports:
+      - "8080:8080"
+volumes:
+  data:
